@@ -284,11 +284,6 @@ Jika diperlukan integrasi:
 
 This project is proprietary software for PT. Smart ISP.
 
-## 📞 **Support**
-
-Untuk pertanyaan teknis atau bantuan deployment:
-- Email: developer@smart.com
-- Documentation: [Link to detailed docs]
 
 ---
 
