@@ -117,8 +117,8 @@
             │ - All access│
             │             │
             │ Manager:    │
-            │ - Reports   │
             │ - Approvals │
+            │ - All Sales │
             │             │
             │ Sales:      │
             │ - Leads     │
@@ -189,10 +189,12 @@
 │ GET    /leads                                           │
 │ POST   /leads                                           │
 │ GET    /projects                                        │
-│ POST   /projects/{id}/approve                           │
+│ GET    /projects/pending/approval (Manager/Admin)       │
+│ PATCH  /projects/{id}/approve                           │
+│ PATCH  /projects/{id}/reject                            │
+│ PATCH  /projects/{id}/submit-approval                   │
 │ GET    /customers                                       │
 │ POST   /customers/{id}/services                         │
-│ GET    /reports (Manager/Admin only)                    │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -320,6 +322,13 @@ ORDER BY month;
 
 ---
 
-**Document Version:** 1.0  
-**Last Updated:** 31 Juli 2025  
+**Document Version:** 2.0  
+**Last Updated:** 14 Agustus 2025  
 **Prepared by:** PT. Smart Development Team
+
+**Changes in v2.0:**
+- Removed Reports module (streamlined workflow)
+- Updated project status workflow (pending → waiting_approval)
+- Added dark/light theme toggle
+- Improved role hierarchy system
+- Enhanced customer portal features

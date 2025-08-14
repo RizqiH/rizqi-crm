@@ -41,10 +41,8 @@ class ProjectService
 
         $data = $projectDTO->toArray();
 
-        // Set default status if not provided
-        if (!isset($data['status'])) {
-            $data['status'] = 'planning';
-        }
+        // Force status to 'pending' for new projects (system controlled)
+        $data['status'] = 'pending';
 
         return $this->projectRepository->create($data);
     }
@@ -72,19 +70,23 @@ class ProjectService
             throw new Exception('Project not found');
         }
 
-        if ($project->status !== 'planning' && $project->status !== 'in_progress') {
+        if ($project->status !== 'pending' && $project->status !== 'in_progress') {
             throw new Exception('Project cannot be submitted for approval in current status');
         }
 
-        $updated = $this->projectRepository->update($id, ['status' => 'pending_approval']);
+        $updated = $this->projectRepository->update($id, ['status' => 'waiting_approval']);
 
-        if ($updated && $project->manager_id) {
-            // Send notification to manager
-            $manager = User::find($project->manager_id);
-            $submitter = User::find($project->created_by ?? Auth::id());
+        if ($updated && $project->assigned_to) {
+            // Send notification to assigned user
+            $assignedUser = User::find($project->assigned_to);
+            $submitter = Auth::user(); // Current user submitting
 
-            if ($manager && $submitter) {
-                $manager->notify(new ProjectSubmittedForApproval($project, $submitter));
+            if ($assignedUser && $submitter) {
+                // Notify managers about the submission
+                $managers = User::whereIn('role', ['manager', 'admin'])->get();
+                foreach ($managers as $manager) {
+                    $manager->notify(new ProjectSubmittedForApproval($project, $submitter));
+                }
             }
         }
 
@@ -99,24 +101,24 @@ class ProjectService
             throw new Exception('Project not found');
         }
 
-        if ($project->status !== 'pending_approval') {
+        if ($project->status !== 'waiting_approval') {
             throw new Exception('Project is not pending approval');
         }
 
         // Check if the manager is authorized (you can add role checking here)
         $updated = $this->projectRepository->update($id, [
             'status' => 'approved',
-            'manager_id' => $managerId,
+            'approved_by' => $managerId, // Corrected field
             'approved_at' => now()
         ]);
 
         if ($updated) {
-            // Send notification to project creator
+            // Send notification to project assigned user (who submitted it)
             $manager = User::find($managerId);
-            $creator = User::find($project->created_by);
+            $assignedUser = User::find($project->assigned_to); // Corrected field
 
-            if ($manager && $creator) {
-                $creator->notify(new ProjectApproved($project, $manager));
+            if ($manager && $assignedUser) {
+                $assignedUser->notify(new ProjectApproved($project, $manager));
             }
         }
 
@@ -131,13 +133,13 @@ class ProjectService
             throw new Exception('Project not found');
         }
 
-        if ($project->status !== 'pending_approval') {
+        if ($project->status !== 'waiting_approval') {
             throw new Exception('Project is not pending approval');
         }
 
         $updateData = [
             'status' => 'rejected',
-            'manager_id' => $managerId,
+            'approved_by' => $managerId, // Corrected field (even for rejection, for tracking)
             'rejected_at' => now()
         ];
 
@@ -148,12 +150,12 @@ class ProjectService
         $updated = $this->projectRepository->update($id, $updateData);
 
         if ($updated) {
-            // Send notification to project creator
+            // Send notification to project assigned user (who submitted it)
             $manager = User::find($managerId);
-            $creator = User::find($project->created_by);
+            $assignedUser = User::find($project->assigned_to); // Corrected field
 
-            if ($manager && $creator) {
-                $creator->notify(new ProjectRejected($project, $manager, $reason));
+            if ($manager && $assignedUser) {
+                $assignedUser->notify(new ProjectRejected($project, $manager, $reason));
             }
         }
 
@@ -199,9 +201,9 @@ class ProjectService
 
         return [
             'total' => $allProjects->count(),
-            'planning' => $allProjects->where('status', 'planning')->count(),
+            'pending' => $allProjects->where('status', 'pending')->count(),
             'in_progress' => $allProjects->where('status', 'in_progress')->count(),
-            'pending_approval' => $allProjects->where('status', 'pending_approval')->count(),
+            'waiting_approval' => $allProjects->where('status', 'waiting_approval')->count(),
             'approved' => $allProjects->where('status', 'approved')->count(),
             'rejected' => $allProjects->where('status', 'rejected')->count(),
             'completed' => $allProjects->where('status', 'completed')->count(),

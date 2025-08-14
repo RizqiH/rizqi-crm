@@ -24,9 +24,9 @@ class CacheService
                 ],
                 'projects' => [
                     'total' => Project::count(),
-                    'pending' => Project::where('status', 'planning')->count(),
+                    'pending' => Project::where('status', 'pending')->count(),
                     'in_progress' => Project::where('status', 'in_progress')->count(),
-                    'pending_approval' => Project::where('status', 'pending_approval')->count(),
+                    'waiting_approval' => Project::where('status', 'waiting_approval')->count(),
                 ],
                 'customers' => [
                     'total' => Customer::count(),

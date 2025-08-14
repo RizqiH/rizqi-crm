@@ -18,11 +18,11 @@ Aplikasi CRM untuk PT. Smart (Internet Service Provider) yang membantu divisi sa
 - ✅ **Customer Management** - Data customer aktif dengan list layanan berlangganan
 
 ### **Advanced Features (Bonus)**
-- 📊 **Advanced Reporting** - Analytics revenue, conversion rate, performance
 - 📧 **Email Notifications** - Otomatis untuk workflow approval
-- 🔐 **Role-Based Permissions** - Admin, Manager, Sales, Support roles
+- 🔐 **Role-Based Permissions** - Admin, Manager, Sales, Support roles  
 - 🌐 **Customer Portal** - Self-service untuk customer (billing, support, services)
 - ⚙️ **Service Management** - Add/remove/suspend/activate layanan customer
+- 🎨 **Dark/Light Theme** - Mode gelap dan terang dengan toggle otomatis
 
 ## 🛠 **Tech Stack**
 
@@ -109,9 +109,9 @@ Setelah seeding, tersedia user default:
 | Role | Email | Password | Access |
 |------|-------|----------|---------|
 | Admin | admin@smart.com | password | Full access |
-| Manager | manager@smart.com | password | Reports + approvals |
-| Sales | sales@smart.com | password | Leads + customers |
-| Support | support@smart.com | password | Customer support |
+| Manager | manager@smart.com | password | All features + approvals |
+| Sales 1 | sales1@smart.com | password | Leads + projects + customers |
+| Sales 2 | sales2@smart.com | password | Leads + projects + customers |
 
 ## 🗃 **Database Schema**
 
@@ -152,8 +152,8 @@ Track    Manager                 Portal     Activate
 | Leads | ✅ | ✅ | ✅ | ❌ |
 | Projects | ✅ | ✅ | ✅ | ❌ |
 | Customers | ✅ | ✅ | ✅ | ✅ |
-| Reports | ✅ | ✅ | ❌ | ❌ |
-| Approvals | ✅ | ✅ | ❌ | ❌ |
+| Project Approvals | ✅ | ✅ | ❌ | ❌ |
+| Theme Toggle | ✅ | ✅ | ✅ | ✅ |
 
 ## 🌐 **Customer Portal**
 
@@ -167,14 +167,13 @@ Akses: `/customer-portal/login`
 
 **Login:** Customer Code + Email
 
-## 📈 **Reporting & Analytics**
+## 🎯 **Project Workflow**
 
-Tersedia untuk Manager & Admin:
-- Revenue trends dan growth analysis
-- Lead conversion rate tracking
-- Project performance metrics
-- Customer analytics dan retention
-- Top performing products
+Workflow approval yang efisien:
+- Project status: pending → in_progress → waiting_approval → approved/rejected → completed
+- Manager approval dengan notification system
+- Role hierarchy: Admin > Manager > Sales > Support
+- Automatic status tracking dan timestamp
 
 ## 🔧 **Development Tools**
 
@@ -295,43 +294,16 @@ Untuk pertanyaan teknis atau bantuan deployment:
 
 **Made with ❤️ for PT. Smart ISP Digital Transformation**
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 📊 **Database Query Examples**
 
-## Learning Laravel
+Query simulasi tersedia di `data_dictionary.md` untuk:
+- User management dan role analysis
+- Lead conversion tracking
+- Project workflow monitoring  
+- Customer service analytics
+- Revenue calculations
+- Performance metrics
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**Laravel Framework License**: [MIT License](https://opensource.org/licenses/MIT)

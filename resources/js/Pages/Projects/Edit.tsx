@@ -95,7 +95,7 @@ export default function Edit({ project, leads, products, managers }: Props) {
         <AuthenticatedLayout
             header={
                 <div className="flex justify-between items-center">
-                    <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                    <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                         Edit Project: {project.name}
                     </h2>
                     <Link href={route('projects.show', project.id)}>
@@ -108,16 +108,16 @@ export default function Edit({ project, leads, products, managers }: Props) {
 
             <div className="py-12">
                 <div className="max-w-4xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6">
                             {!canEdit() && (
-                                <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                <div className="mb-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg">
                                     <div className="flex">
                                         <div className="ml-3">
-                                            <h3 className="text-sm font-medium text-yellow-800">
+                                            <h3 className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
                                                 Editing Restricted
                                             </h3>
-                                            <div className="mt-2 text-sm text-yellow-700">
+                                            <div className="mt-2 text-sm text-yellow-700 dark:text-yellow-300">
                                                 <p>
                                                     Projects with status "{project.status}" cannot be edited.
                                                     Only projects in "pending" or "rejected" status can be modified.
@@ -132,7 +132,7 @@ export default function Edit({ project, leads, products, managers }: Props) {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {/* Project Name */}
                                     <div className="md:col-span-2">
-                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                                        <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             Project Name *
                                         </label>
                                         <Input
@@ -148,14 +148,14 @@ export default function Edit({ project, leads, products, managers }: Props) {
 
                                     {/* Lead Selection */}
                                     <div>
-                                        <label htmlFor="lead_id" className="block text-sm font-medium text-gray-700 mb-2">
+                                        <label htmlFor="lead_id" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             Lead *
                                         </label>
                                         <select
                                             id="lead_id"
                                             value={data.lead_id}
                                             onChange={(e) => setData('lead_id', parseInt(e.target.value))}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                                             disabled={!canEdit()}
                                         >
                                             <option value="">Select a lead</option>
@@ -166,20 +166,20 @@ export default function Edit({ project, leads, products, managers }: Props) {
                                             ))}
                                         </select>
                                         {errors.lead_id && (
-                                            <p className="mt-1 text-sm text-red-600">{errors.lead_id}</p>
+                                            <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.lead_id}</p>
                                         )}
                                     </div>
 
                                     {/* Product Selection */}
                                     <div>
-                                        <label htmlFor="product_id" className="block text-sm font-medium text-gray-700 mb-2">
+                                        <label htmlFor="product_id" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             Product/Service *
                                         </label>
                                         <select
                                             id="product_id"
                                             value={data.product_id}
                                             onChange={(e) => setData('product_id', parseInt(e.target.value))}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                                             disabled={!canEdit()}
                                         >
                                             <option value="">Select a product/service</option>
@@ -190,20 +190,20 @@ export default function Edit({ project, leads, products, managers }: Props) {
                                             ))}
                                         </select>
                                         {errors.product_id && (
-                                            <p className="mt-1 text-sm text-red-600">{errors.product_id}</p>
+                                            <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.product_id}</p>
                                         )}
                                     </div>
 
                                     {/* Manager Selection */}
                                     <div>
-                                        <label htmlFor="manager_id" className="block text-sm font-medium text-gray-700 mb-2">
+                                        <label htmlFor="manager_id" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             Manager
                                         </label>
                                         <select
                                             id="manager_id"
                                             value={data.manager_id}
                                             onChange={(e) => setData('manager_id', parseInt(e.target.value))}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                                             disabled={!canEdit()}
                                         >
                                             <option value="">Select a manager</option>
@@ -214,13 +214,13 @@ export default function Edit({ project, leads, products, managers }: Props) {
                                             ))}
                                         </select>
                                         {errors.manager_id && (
-                                            <p className="mt-1 text-sm text-red-600">{errors.manager_id}</p>
+                                            <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.manager_id}</p>
                                         )}
                                     </div>
 
                                     {/* Estimated Value */}
                                     <div>
-                                        <label htmlFor="estimated_value" className="block text-sm font-medium text-gray-700 mb-2">
+                                        <label htmlFor="estimated_value" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             Estimated Value ($)
                                         </label>
                                         <input
@@ -230,18 +230,18 @@ export default function Edit({ project, leads, products, managers }: Props) {
                                             min="0"
                                             value={data.estimated_value}
                                             onChange={(e) => setData('estimated_value', parseFloat(e.target.value) || 0)}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                                             placeholder="0.00"
                                             disabled={!canEdit()}
                                         />
                                         {errors.estimated_value && (
-                                            <p className="mt-1 text-sm text-red-600">{errors.estimated_value}</p>
+                                            <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.estimated_value}</p>
                                         )}
                                     </div>
 
                                     {/* Start Date */}
                                     <div>
-                                        <label htmlFor="start_date" className="block text-sm font-medium text-gray-700 mb-2">
+                                        <label htmlFor="start_date" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             Start Date
                                         </label>
                                         <input
@@ -249,17 +249,17 @@ export default function Edit({ project, leads, products, managers }: Props) {
                                             type="date"
                                             value={data.start_date ? formatDate(data.start_date) : ''}
                                             onChange={(e) => setData('start_date', e.target.value)}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                                             disabled={!canEdit()}
                                         />
                                         {errors.start_date && (
-                                            <p className="mt-1 text-sm text-red-600">{errors.start_date}</p>
+                                            <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.start_date}</p>
                                         )}
                                     </div>
 
                                     {/* End Date */}
                                     <div>
-                                        <label htmlFor="end_date" className="block text-sm font-medium text-gray-700 mb-2">
+                                        <label htmlFor="end_date" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             End Date
                                         </label>
                                         <input
@@ -267,17 +267,17 @@ export default function Edit({ project, leads, products, managers }: Props) {
                                             type="date"
                                             value={data.end_date ? formatDate(data.end_date) : ''}
                                             onChange={(e) => setData('end_date', e.target.value)}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                                             disabled={!canEdit()}
                                         />
                                         {errors.end_date && (
-                                            <p className="mt-1 text-sm text-red-600">{errors.end_date}</p>
+                                            <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.end_date}</p>
                                         )}
                                     </div>
 
                                     {/* Description */}
                                     <div className="md:col-span-2">
-                                        <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+                                        <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             Description *
                                         </label>
                                         <textarea
@@ -285,33 +285,33 @@ export default function Edit({ project, leads, products, managers }: Props) {
                                             rows={4}
                                             value={data.description}
                                             onChange={(e) => setData('description', e.target.value)}
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                                             placeholder="Describe the project requirements, scope, and objectives"
                                             disabled={!canEdit()}
                                         />
                                         {errors.description && (
-                                            <p className="mt-1 text-sm text-red-600">{errors.description}</p>
+                                            <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.description}</p>
                                         )}
                                     </div>
                                 </div>
 
                                 {/* Current Status Display */}
-                                <div className="pt-6 border-t border-gray-200">
+                                <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
                                     <div className="flex items-center justify-between">
                                         <div>
-                                            <h3 className="text-lg font-medium text-gray-900">Current Status</h3>
-                                            <p className="text-sm text-gray-600 mt-1">
+                                            <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">Current Status</h3>
+                                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                                                 This project is currently in "{project.status}" status.
                                             </p>
                                         </div>
                                         <span className={`inline-flex px-3 py-1 text-xs font-semibold rounded-full ${
-                                            project.status === 'pending' ? 'bg-blue-100 text-blue-800' :
-                                            project.status === 'waiting_approval' ? 'bg-purple-100 text-purple-800' :
-                                            project.status === 'approved' ? 'bg-green-100 text-green-800' :
-                                            project.status === 'rejected' ? 'bg-red-100 text-red-800' :
-                                            project.status === 'in_progress' ? 'bg-yellow-100 text-yellow-800' :
-                                            project.status === 'completed' ? 'bg-gray-100 text-gray-800' :
-                                            'bg-gray-100 text-gray-800'
+                                            project.status === 'pending' ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200' :
+                                            project.status === 'waiting_approval' ? 'bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200' :
+                                            project.status === 'approved' ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' :
+                                            project.status === 'rejected' ? 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200' :
+                                            project.status === 'in_progress' ? 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200' :
+                                            project.status === 'completed' ? 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200' :
+                                            'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
                                         }`}>
                                             {project.status.toUpperCase().replace('_', ' ')}
                                         </span>
@@ -319,7 +319,7 @@ export default function Edit({ project, leads, products, managers }: Props) {
                                 </div>
 
                                 {/* Action Buttons */}
-                                <div className="flex flex-wrap gap-4 pt-6 border-t border-gray-200">
+                                <div className="flex flex-wrap gap-4 pt-6 border-t border-gray-200 dark:border-gray-700">
                                     <div className="flex gap-2">
                                         <Link href={route('projects.show', project.id)}>
                                             <Button variant="secondary">Cancel</Button>
