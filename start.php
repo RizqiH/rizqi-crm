@@ -91,15 +91,16 @@ try {
 
 // Start PHP built-in server
 $host = '0.0.0.0';
-$port = $_ENV['PORT'] ?? 8080;
+$port = getenv('PORT') ?: ($_ENV['PORT'] ?? 8080);
 
 echo "🌐 Memulai web server di {$host}:{$port}...\n";
 echo "✅ DWP Smart Management tersedia di http://{$host}:{$port}\n";
 
-// Change to public directory
-chdir('public');
+// Start built-in PHP server dengan document root ke public directory
+// Pastikan menggunakan absolute path untuk public directory
+$publicPath = __DIR__ . '/public';
+$command = "php -S {$host}:{$port} -t {$publicPath}";
 
-// Start built-in PHP server
-$command = "php -S {$host}:{$port}";
+echo "📋 Menjalankan command: {$command}\n";
 exec($command);
 
