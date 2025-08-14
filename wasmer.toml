@@ -1,0 +1,27 @@
+[package]
+name = "dwp-smart-app"
+version = "1.0.0"
+description = "DWP Smart Management Application - Laravel + React"
+readme = "README.md"
+
+[dependencies]
+"wasmer/php" = "8.2"
+
+[fs]
+"/app" = "."
+
+[[module]]
+name = "web"
+source = "index.php"
+abi = "wasi"
+
+[module.web.runner]
+args = ["serve", "--host=0.0.0.0", "--port=8080"]
+
+[[command]]
+name = "serve"
+module = "web"
+runner = "https://webc.org/runner/wasi"
+
+[package.entrypoint]
+cmd = ["php", "-S", "0.0.0.0:8080", "-t", "public"]
