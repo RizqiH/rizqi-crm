@@ -14,5 +14,9 @@ readme = "README.md"
 name = "dwp-smart-app"
 
 [[app.commands]]
-name = "start"
+name = "setup"
 cmd = ["php", "start.php"]
+
+[[app.commands]]
+name = "start"
+cmd = ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]

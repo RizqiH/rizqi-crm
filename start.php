@@ -1,24 +1,17 @@
 <?php
 
+echo "🚀 Memulai setup DWP Smart Management Application...\n";
+
+// Set working directory
+chdir(__DIR__);
+
 // Bootstrap path
 $bootstrapPath = __DIR__ . '/bootstrap/app.php';
 
-// Check if we're in the right directory
+// Verify bootstrap file exists
 if (!file_exists($bootstrapPath)) {
-    // Try to find the correct path
-    $possiblePaths = [
-        __DIR__ . '/bootstrap/app.php',
-        '/app/bootstrap/app.php',
-        getcwd() . '/bootstrap/app.php'
-    ];
-
-    foreach ($possiblePaths as $path) {
-        if (file_exists($path)) {
-            $bootstrapPath = $path;
-            chdir(dirname(dirname($path)));
-            break;
-        }
-    }
+    echo "❌ Error: bootstrap/app.php tidak ditemukan!\n";
+    exit(1);
 }
 
 // Create production .env if not exists
@@ -63,45 +56,36 @@ foreach ($storageDirs as $dir) {
     }
 }
 
-// Ensure vendor exists
+// Verify vendor directory exists
 if (!is_dir('vendor')) {
-    echo "Error: vendor directory not found. Run 'composer install' first.\n";
+    echo "❌ Error: vendor directory tidak ditemukan! Jalankan 'composer install' terlebih dahulu.\n";
     exit(1);
 }
 
+echo "📦 Loading Laravel dependencies...\n";
 require_once 'vendor/autoload.php';
 
 // Bootstrap Laravel
+echo "⚡ Bootstrapping Laravel application...\n";
 $app = require_once $bootstrapPath;
 
 // Run essential Laravel commands
 try {
     $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
 
-    // Clear caches
-    $kernel->call('config:clear');
-    $kernel->call('cache:clear');
-    $kernel->call('view:clear');
+    echo "🧹 Clearing application caches...\n";
+    $kernel->call('config:cache');
+    $kernel->call('route:cache');
+    $kernel->call('view:cache');
 
-    // Run migrations
+    echo "🗄️  Running database migrations...\n";
     $kernel->call('migrate', ['--force' => true]);
 
-    echo "✅ Laravel app initialized successfully!\n";
+    echo "✅ Laravel application berhasil diinisialisasi!\n";
+    echo "🎉 Setup selesai! Aplikasi siap untuk dijalankan.\n";
 
 } catch (Exception $e) {
-    echo "⚠️  Warning during initialization: " . $e->getMessage() . "\n";
+    echo "⚠️  Warning selama inisialisasi: " . $e->getMessage() . "\n";
+    echo "ℹ️  Aplikasi tetap dapat dijalankan, namun beberapa fitur mungkin tidak berfungsi optimal.\n";
 }
-
-// Start built-in server
-$host = '0.0.0.0';
-$port = $_ENV['PORT'] ?? 8080;
-
-echo "🚀 Starting server at {$host}:{$port}\n";
-
-// Use Laravel's serve command
-$kernel->call('serve', [
-    '--host' => $host,
-    '--port' => $port,
-    '--no-reload' => true
-]);
 
