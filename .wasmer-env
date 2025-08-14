@@ -1,0 +1,19 @@
+APP_NAME=DWP Smart Management
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://dwp-smart-app.wasmer.app
+
+DB_CONNECTION=pgsql
+DB_HOST=turntable.proxy.rlwy.net
+DB_PORT=37284
+DB_DATABASE=railway
+DB_USERNAME=postgres
+DB_PASSWORD=tdfJbvddfxeYPMuaLPCWhTHpmZnVZvZk
+
+SESSION_DRIVER=file
+CACHE_STORE=file
+QUEUE_CONNECTION=sync
+MAIL_MAILER=log
+
+LOG_LEVEL=error
+LOG_CHANNEL=single
