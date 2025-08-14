@@ -4,11 +4,15 @@ version: 1.0.0
 
 build:
   commands:
-    - composer install --no-dev --optimize-autoloader --no-interaction
+    - ls -la
+    - composer --version
+    - composer install --no-dev --optimize-autoloader --no-interaction --verbose
+    - ls -la vendor/
     - npm ci --production=false
     - npm run build
     - mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache
     - chmod -R 755 storage bootstrap/cache
+    - ls -la
 
 env:
   APP_NAME: "DWP Smart Management"

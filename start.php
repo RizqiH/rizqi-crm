@@ -56,14 +56,53 @@ foreach ($storageDirs as $dir) {
     }
 }
 
+// Debug: Check current working directory and files
+echo "📍 Current working directory: " . getcwd() . "\n";
+echo "📁 Files in current directory:\n";
+$files = scandir('.');
+foreach ($files as $file) {
+    if ($file !== '.' && $file !== '..') {
+        echo "  - {$file}\n";
+    }
+}
+
 // Verify vendor directory exists
 if (!is_dir('vendor')) {
-    echo "❌ Error: vendor directory tidak ditemukan! Jalankan 'composer install' terlebih dahulu.\n";
+    echo "❌ Error: vendor directory tidak ditemukan!\n";
+    echo "📁 Mencoba mencari vendor di lokasi lain...\n";
+
+    $possibleVendorPaths = [
+        './vendor',
+        '../vendor',
+        '/app/vendor',
+        __DIR__ . '/vendor'
+    ];
+
+    foreach ($possibleVendorPaths as $path) {
+        echo "  Checking: {$path} - " . (is_dir($path) ? "✅ FOUND" : "❌ NOT FOUND") . "\n";
+    }
+
     exit(1);
 }
 
-echo "📦 Loading Laravel dependencies...\n";
-require_once 'vendor/autoload.php';
+echo "✅ Vendor directory ditemukan!\n";
+
+// Verify autoloader file exists
+$autoloaderPath = 'vendor/autoload.php';
+if (!file_exists($autoloaderPath)) {
+    echo "❌ Error: {$autoloaderPath} tidak ditemukan!\n";
+    echo "📁 Contents of vendor directory:\n";
+    $vendorFiles = scandir('vendor');
+    foreach ($vendorFiles as $file) {
+        if ($file !== '.' && $file !== '..') {
+            echo "  - {$file}\n";
+        }
+    }
+    exit(1);
+}
+
+echo "📦 Loading Laravel dependencies from {$autoloaderPath}...\n";
+require_once $autoloaderPath;
 
 // Bootstrap Laravel
 echo "⚡ Bootstrapping Laravel application...\n";
