@@ -89,3 +89,17 @@ try {
     echo "ℹ️  Aplikasi tetap dapat dijalankan, namun beberapa fitur mungkin tidak berfungsi optimal.\n";
 }
 
+// Start PHP built-in server
+$host = '0.0.0.0';
+$port = $_ENV['PORT'] ?? 8080;
+
+echo "🌐 Memulai web server di {$host}:{$port}...\n";
+echo "✅ DWP Smart Management tersedia di http://{$host}:{$port}\n";
+
+// Change to public directory
+chdir('public');
+
+// Start built-in PHP server
+$command = "php -S {$host}:{$port}";
+exec($command);
+

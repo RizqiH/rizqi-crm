@@ -10,13 +10,14 @@ readme = "README.md"
 [fs]
 "/" = "."
 
-[app]
+[module]
 name = "dwp-smart-app"
+source = "."
+abi = "wasi"
 
-[[app.commands]]
-name = "setup"
-cmd = ["php", "start.php"]
-
-[[app.commands]]
+[[command]]
 name = "start"
-cmd = ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]
+module = "dwp-smart-app"
+
+[command.annotations.wasi]
+main-args = ["php", "start.php"]
