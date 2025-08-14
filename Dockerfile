@@ -1,5 +1,4 @@
-# Use PHP 8.2 with FPM
-FROM php:8.2-fpm
+FROM php:8.2-cli
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -13,36 +12,44 @@ RUN apt-get update && apt-get install -y \
     nodejs \
     npm \
     libpq-dev \
-    && docker-php-ext-install pdo_pgsql mbstring exif pcntl bcmath gd
+    && docker-php-ext-install pdo_pgsql mbstring exif pcntl bcmath gd \
+    && rm -rf /var/lib/apt/lists/*
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Set working directory
-WORKDIR /var/www
+WORKDIR /app
 
-# Copy application files
-COPY . .
+# Copy composer files first for better caching
+COPY composer.json composer.lock ./
 
 # Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader --no-scripts
 
-# Install Node.js dependencies and build assets
-RUN npm install && npm run build
+# Copy package.json files
+COPY package*.json ./
+
+# Install Node.js dependencies
+RUN npm ci
+
+# Copy all application files
+COPY . .
+
+# Build assets
+RUN npm run build
+
+# Set up Laravel
+RUN cp .env.example .env \
+    && php artisan key:generate \
+    && php artisan config:clear \
+    && php artisan cache:clear
 
 # Set permissions
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 755 /var/www/storage \
-    && chmod -R 755 /var/www/bootstrap/cache
-
-# Create .env from .env.example if not exists
-RUN if [ ! -f .env ]; then cp .env.example .env; fi
-
-# Generate application key
-RUN php artisan key:generate
+RUN chmod -R 755 storage bootstrap/cache
 
 # Expose port 8080
 EXPOSE 8080
 
 # Start the application
-CMD php artisan serve --host=0.0.0.0 --port=8080
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8080"]

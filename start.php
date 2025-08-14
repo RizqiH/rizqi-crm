@@ -1,8 +1,29 @@
 <?php
 
-// Create minimal .env for production
-$envContent = '
-APP_NAME="DWP Smart Management"
+// Bootstrap path
+$bootstrapPath = __DIR__ . '/bootstrap/app.php';
+
+// Check if we're in the right directory
+if (!file_exists($bootstrapPath)) {
+    // Try to find the correct path
+    $possiblePaths = [
+        __DIR__ . '/bootstrap/app.php',
+        '/app/bootstrap/app.php',
+        getcwd() . '/bootstrap/app.php'
+    ];
+    
+    foreach ($possiblePaths as $path) {
+        if (file_exists($path)) {
+            $bootstrapPath = $path;
+            chdir(dirname(dirname($path)));
+            break;
+        }
+    }
+}
+
+// Create production .env if not exists
+if (!file_exists('.env')) {
+    $envContent = 'APP_NAME="DWP Smart Management"
 APP_ENV=production
 APP_KEY=base64:fDyyY5fLH0n78AB+OCJAxG8qN9KR7e3Crsjp0NVJZE0=
 APP_DEBUG=false
@@ -20,42 +41,67 @@ SESSION_LIFETIME=120
 CACHE_STORE=file
 QUEUE_CONNECTION=sync
 MAIL_MAILER=log
-
 LOG_LEVEL=error
-LOG_CHANNEL=single
-';
+LOG_CHANNEL=single';
 
-file_put_contents(__DIR__ . '/.env', trim($envContent));
+    file_put_contents('.env', $envContent);
+}
 
-// Set up storage permissions
-$storageDirs = ['logs', 'framework/cache', 'framework/sessions', 'framework/views'];
+// Ensure storage directories exist
+$storageDirs = [
+    'storage/app',
+    'storage/framework/cache/data',
+    'storage/framework/sessions',
+    'storage/framework/views',
+    'storage/logs',
+    'bootstrap/cache'
+];
+
 foreach ($storageDirs as $dir) {
-    $path = __DIR__ . '/storage/' . $dir;
-    if (!is_dir($path)) {
-        mkdir($path, 0755, true);
+    if (!is_dir($dir)) {
+        mkdir($dir, 0755, true);
     }
 }
 
+// Ensure vendor exists
+if (!is_dir('vendor')) {
+    echo "Error: vendor directory not found. Run 'composer install' first.\n";
+    exit(1);
+}
+
+require_once 'vendor/autoload.php';
+
 // Bootstrap Laravel
-require_once __DIR__ . '/vendor/autoload.php';
+$app = require_once $bootstrapPath;
 
-$app = require_once __DIR__ . '/bootstrap/app.php';
+// Run essential Laravel commands
+try {
+    $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+    
+    // Clear caches
+    $kernel->call('config:clear');
+    $kernel->call('cache:clear');
+    $kernel->call('view:clear');
+    
+    // Run migrations
+    $kernel->call('migrate', ['--force' => true]);
+    
+    echo "✅ Laravel app initialized successfully!\n";
+    
+} catch (Exception $e) {
+    echo "⚠️  Warning during initialization: " . $e->getMessage() . "\n";
+}
 
-// Run migrations
-$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
-$kernel->call('migrate', ['--force' => true]);
+// Start built-in server
+$host = '0.0.0.0';
+$port = $_ENV['PORT'] ?? 8080;
 
-// Start the server
-$_SERVER['SERVER_NAME'] = '0.0.0.0';
-$_SERVER['SERVER_PORT'] = '8080';
-$_SERVER['REQUEST_METHOD'] = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-$_SERVER['REQUEST_URI'] = $_SERVER['REQUEST_URI'] ?? '/';
+echo "🚀 Starting server at {$host}:{$port}\n";
 
-// Handle the request
-$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
+// Use Laravel's serve command
+$kernel->call('serve', [
+    '--host' => $host,
+    '--port' => $port,
+    '--no-reload' => true
+]);
 
-$request = Illuminate\Http\Request::capture();
-$response = $kernel->handle($request);
-$response->send();
-
-$kernel->terminate($request, $response);

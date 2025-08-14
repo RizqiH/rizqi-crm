@@ -1,0 +1,37 @@
+name: dwp-smart-app
+description: DWP Smart Management Application - Laravel + React
+version: 1.0.0
+
+build:
+  commands:
+    - composer install --no-dev --optimize-autoloader
+    - npm ci
+    - npm run build
+    - cp .env.example .env || true
+    - php artisan key:generate --force
+    - php artisan config:clear
+    - php artisan cache:clear
+
+env:
+  APP_NAME: "DWP Smart Management"
+  APP_ENV: production
+  APP_DEBUG: false
+  APP_KEY: "base64:fDyyY5fLH0n78AB+OCJAxG8qN9KR7e3Crsjp0NVJZE0="
+  DB_CONNECTION: pgsql
+  DB_HOST: turntable.proxy.rlwy.net
+  DB_PORT: "37284"
+  DB_DATABASE: railway
+  DB_USERNAME: postgres
+  DB_PASSWORD: tdfJbvddfxeYPMuaLPCWhTHpmZnVZvZk
+  SESSION_DRIVER: file
+  CACHE_STORE: file
+  QUEUE_CONNECTION: sync
+  MAIL_MAILER: log
+  LOG_LEVEL: error
+
+start:
+  cmd: php artisan serve --host=0.0.0.0 --port=8080
+
+volumes:
+  - "./storage"
+  - "./bootstrap/cache"

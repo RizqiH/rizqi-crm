@@ -1,0 +1,36 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.php",
+      "use": "vercel-php@0.7.1"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/api/index.php"
+    }
+  ],
+  "env": {
+    "APP_NAME": "DWP Smart Management",
+    "APP_ENV": "production",
+    "APP_DEBUG": "false",
+    "APP_KEY": "base64:fDyyY5fLH0n78AB+OCJAxG8qN9KR7e3Crsjp0NVJZE0=",
+    "DB_CONNECTION": "pgsql",
+    "DB_HOST": "turntable.proxy.rlwy.net",
+    "DB_PORT": "37284",
+    "DB_DATABASE": "railway",
+    "DB_USERNAME": "postgres",
+    "DB_PASSWORD": "tdfJbvddfxeYPMuaLPCWhTHpmZnVZvZk",
+    "SESSION_DRIVER": "file",
+    "CACHE_STORE": "file",
+    "QUEUE_CONNECTION": "sync",
+    "MAIL_MAILER": "log",
+    "LOG_LEVEL": "error"
+  }
+}

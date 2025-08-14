@@ -2,6 +2,17 @@
 name = "dwp-smart-app"
 version = "1.0.0"
 description = "DWP Smart Management Application - Laravel + React"
+license = "MIT"
+readme = "README.md"
+
+[dependencies]
 
 [fs]
 "/" = "."
+
+[app]
+name = "dwp-smart-app"
+
+[[app.commands]]
+name = "start"
+cmd = ["php", "start.php"]
