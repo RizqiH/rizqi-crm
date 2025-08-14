@@ -11,7 +11,7 @@ if (!file_exists($bootstrapPath)) {
         '/app/bootstrap/app.php',
         getcwd() . '/bootstrap/app.php'
     ];
-    
+
     foreach ($possiblePaths as $path) {
         if (file_exists($path)) {
             $bootstrapPath = $path;
@@ -77,17 +77,17 @@ $app = require_once $bootstrapPath;
 // Run essential Laravel commands
 try {
     $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
-    
+
     // Clear caches
     $kernel->call('config:clear');
     $kernel->call('cache:clear');
     $kernel->call('view:clear');
-    
+
     // Run migrations
     $kernel->call('migrate', ['--force' => true]);
-    
+
     echo "✅ Laravel app initialized successfully!\n";
-    
+
 } catch (Exception $e) {
     echo "⚠️  Warning during initialization: " . $e->getMessage() . "\n";
 }

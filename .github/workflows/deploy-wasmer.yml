@@ -7,50 +7,50 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      
+
     - name: Setup PHP
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.2'
         extensions: mbstring, xml, ctype, iconv, intl, pdo_pgsql, dom, filter, gd, json, bcmath
         tools: composer:v2
-        
+
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '18'
         cache: 'npm'
-        
+
     - name: Get composer cache directory
       id: composer-cache
       run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-      
+
     - name: Cache composer dependencies
       uses: actions/cache@v3
       with:
         path: ${{ steps.composer-cache.outputs.dir }}
         key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
         restore-keys: ${{ runner.os }}-composer-
-        
+
     - name: Install dependencies and build
       run: |
         chmod +x build.sh
         ./build.sh
-      
+
     - name: Install Wasmer CLI
       run: curl https://get.wasmer.io -sSfL | sh
-      
+
     - name: Login to Wasmer
       env:
         WASMER_TOKEN: ${{ secrets.WASMER_TOKEN }}
       run: |
         source ~/.wasmer/env
         wasmer login $WASMER_TOKEN
-      
+
     - name: Deploy to Wasmer
       run: |
         source ~/.wasmer/env
