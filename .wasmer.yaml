@@ -4,13 +4,11 @@ version: 1.0.0
 
 build:
   commands:
-    - composer install --no-dev --optimize-autoloader
-    - npm ci
+    - composer install --no-dev --optimize-autoloader --no-interaction
+    - npm ci --production=false
     - npm run build
-    - cp .env.example .env || true
-    - php artisan key:generate --force
-    - php artisan config:clear
-    - php artisan cache:clear
+    - mkdir -p storage/logs storage/framework/cache storage/framework/sessions storage/framework/views bootstrap/cache
+    - chmod -R 755 storage bootstrap/cache
 
 env:
   APP_NAME: "DWP Smart Management"
@@ -30,7 +28,7 @@ env:
   LOG_LEVEL: error
 
 start:
-  cmd: php artisan serve --host=0.0.0.0 --port=8080
+  cmd: php start.php
 
 volumes:
   - "./storage"
